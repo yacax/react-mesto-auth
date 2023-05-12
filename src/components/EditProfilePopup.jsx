@@ -45,7 +45,7 @@ export function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
     >
       <input
         type="text"
-        className="popup__input popup__input_name_title"
+        className="form__input popup__input_name_title"
         name="name"
         placeholder="Имя"
         required
@@ -56,11 +56,11 @@ export function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
         onChange={handleChangeName}
       />
 
-      <span className="popup__error-text profile-name-input-error" />
+      <span className="form__error-text profile-name-input-error" />
 
       <input
         type="text"
-        className="popup__input popup__input_name_subtitle"
+        className="form__input popup__input_name_subtitle"
         name="about"
         placeholder="О себе"
         required
@@ -71,7 +71,7 @@ export function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
         onChange={handleChangeAbout}
       />
 
-      <span className="popup__error-text profile-description-input-error" />
+      <span className="form__error-text profile-description-input-error" />
 
     </PopupWithForm>
   )

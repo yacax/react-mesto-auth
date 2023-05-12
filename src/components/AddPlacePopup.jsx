@@ -38,7 +38,7 @@ export function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
     >
       <input
         type="text"
-        className="popup__input popup__input_name_title"
+        className="form__input popup__input_name_title"
         name="name"
         placeholder="Название"
         required
@@ -48,11 +48,11 @@ export function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         value={name}
         onChange={handleChangeName}
       />
-      <span className="popup__error-text place-name-input-error" />
+      <span className="form__error-text place-name-input-error" />
 
       <input
         type="url"
-        className="popup__input popup__input_name_subtitle"
+        className="form__input popup__input_name_subtitle"
         name="link"
         placeholder="Ссылка на картинку"
         id="place-url-input"
@@ -60,7 +60,7 @@ export function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         value={link}
         onChange={handleChangeLink}
       />
-      <span className="popup__error-text place-url-input-error" />
+      <span className="form__error-text place-url-input-error" />
     </PopupWithForm>
   )
 

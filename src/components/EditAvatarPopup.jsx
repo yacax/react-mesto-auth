@@ -27,14 +27,14 @@ export function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
     >
       <input
         type="url"
-        className="popup__input popup__input_name_subtitle"
+        className="form__input popup__input_name_subtitle"
         name="avatar"
         placeholder="Ссылка на картинку"
         id="place-url-avatar-input"
         required
         ref={newAvatar}
       />
-      <span className="popup__error-text place-url-avatar-input-error" />
+      <span className="form__error-text place-url-avatar-input-error" />
     </PopupWithForm>
   )
 }
