@@ -18,8 +18,7 @@ const SignUp = ({ registerUser, errorMessage }) => {
   }
 
   return (
-    <div style={{ marginBottom: '80px' }}>
-
+    <>
       <Header linkTo='/sign-in' linkName='Войти' />
 
       <PageWithForm
@@ -100,7 +99,7 @@ const SignUp = ({ registerUser, errorMessage }) => {
           Войти
         </Link>
       </div>
-    </div>
+    </>
 
   )
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const useForm = (initialState) => {
   const [form, setForm] = useState(initialState);
@@ -13,6 +13,18 @@ const useForm = (initialState) => {
     }
     return false;
   };
+
+  const resetForm = () => {
+    setForm(initialState)
+  }
+
+  const hardChangeIsFormValid = (boolean) => {
+    setIsFormValid(boolean);
+  }
+
+  useEffect(() => {
+    setIsFormValid(!hasErrors(errors))
+  }, [errors])
 
   const handleChange = (evt) => {
     const input = evt.target;
@@ -47,7 +59,7 @@ const useForm = (initialState) => {
     });
   };
 
-  return { form, errors, isFormValid, handleChange };
+  return { form, errors, isFormValid, handleChange, resetForm, hardChangeIsFormValid };
 };
 
 export default useForm;

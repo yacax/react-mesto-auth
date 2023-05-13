@@ -1,30 +1,23 @@
 import PopupWithForm from "./PopupWithForm"
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import useForm from "../hooks/useForm";
 
 export function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
 
-  const [name, setName] = useState('');
-  const [link, setLink] = useState('');
+  const { form, errors, isFormValid, handleChange, resetForm, hardChangeIsFormValid } = useForm({
+    name: "",
+    link: "",
+  })
 
   useEffect(() => {
-    setName('');
-    setLink('');
+    resetForm();
+    hardChangeIsFormValid(false);
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
 
   function handleSubmit(e) {
     e.preventDefault();
-    onAddPlace({
-      name,
-      link,
-    });
-  }
-
-  function handleChangeName(e) {
-    setName(e.target.value);
-  }
-
-  function handleChangeLink(e) {
-    setLink(e.target.value);
+    onAddPlace(form);
   }
 
   return (
@@ -35,6 +28,7 @@ export function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       onClose={onClose}
       buttonText="Создать"
       onSubmit={handleSubmit}
+      isFormValid={isFormValid}
     >
       <input
         type="text"
@@ -45,10 +39,10 @@ export function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         minLength="2"
         maxLength="30"
         id="place-name-input"
-        value={name}
-        onChange={handleChangeName}
+        value={form.name}
+        onChange={handleChange}
       />
-      <span className="form__error-text place-name-input-error" />
+      <span className="form__error-text place-name-input-error">{errors.name} </span>
 
       <input
         type="url"
@@ -57,10 +51,10 @@ export function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         placeholder="Ссылка на картинку"
         id="place-url-input"
         required
-        value={link}
-        onChange={handleChangeLink}
+        value={form.link}
+        onChange={handleChange}
       />
-      <span className="form__error-text place-url-input-error" />
+      <span className="form__error-text place-url-input-error" >{errors.link} </span>
     </PopupWithForm>
   )
 

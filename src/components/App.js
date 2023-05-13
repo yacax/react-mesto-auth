@@ -28,16 +28,17 @@ const App = () => {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
-  const [isTooltipPopupOpen, setIsTooltipPopupOpen] = useState(false);
 
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
 
+  const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState("");
-  const [infoTooltipMessage, setInfoTooltipMessage] = useState("");
-  const [registrationResult, setRegistrationResult] = useState(false);
+
+  const [infoTool, setInfoTool] = useState({ isOpen: false, text: '', result: '' });
+
   const [userData, setUserData] = useState({
     username: "",
     email: "",
@@ -49,35 +50,48 @@ const App = () => {
   }, [])
 
   useEffect(() => {
+    setIsLoading(true);
     if (!token) {
+      setIsLoading(false);
       return
     }
-    userAuth.getUserData(token).then((user) => {
-      setUserData(user);
-      setIsLoggedIn(true);
-      navigate("/");
-    })
+    userAuth.getUserData(token)
+      .then((user) => {
+        setUserData(user);
+        setIsLoggedIn(true);
+        navigate("/");
+      })
       .catch((err) => {
         console.log(err)
       })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [token, navigate])
 
   const registerUser = ({ username, password, email }) => {
     userAuth.register(username, password, email)
       .then((res) => {
-        return userAuth.authorize(email, password);
-      })
-      .then((authRes) => {
-        localStorage.setItem("jwt", authRes.token);
-        setToken(authRes.token);
-        setInfoTooltipMessage("Вы успешно зарегистрировались!");
-        setRegistrationResult(true);
-        setIsTooltipPopupOpen(true);
+        localStorage.setItem("jwt", res.token);
+        setToken(res.token);
+        setInfoTool({
+          ...infoTool,
+          text: "Вы успешно зарегистрировались!",
+          isOpen: true,
+          result: true,
+        }
+        )
       })
       .catch((err) => {
         console.log(err)
-        setInfoTooltipMessage("Что-то пошло не так! Попробуйте ещё раз.");
-        setIsTooltipPopupOpen(true);
+
+        setInfoTool({
+          ...infoTool,
+          text: "Что-то пошло не так! Попробуйте ещё раз.",
+          isOpen: true,
+          result: false,
+        }
+        )
       })
   }
 
@@ -92,8 +106,14 @@ const App = () => {
       })
       .catch((err) => {
         console.log(err);
-        setInfoTooltipMessage("Неправильный логин или пароль!");
-        setIsTooltipPopupOpen(true);
+
+        setInfoTool({
+          ...infoTool,
+          text: "Неправильный логин или пароль!",
+          isOpen: true,
+          result: false,
+        }
+        )
       })
   }
 
@@ -109,17 +129,19 @@ const App = () => {
   }
 
   useEffect(() => {
-    Promise.all([
-      api.getInitialCards(),
-      api.getUserData()
-    ]).then(([initialCards, userData]) => {
-      setCards(initialCards)
-      setCurrentUser(userData)
-    })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [])
+    if (isLoggedIn) {
+      Promise.all([
+        api.getInitialCards(),
+        api.getUserData()
+      ]).then(([initialCards, userData]) => {
+        setCards(initialCards)
+        setCurrentUser(userData)
+      })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [isLoggedIn])
 
   function handleCardDelete(card) {
     api
@@ -175,9 +197,11 @@ const App = () => {
       case isImagePopupOpen:
         setIsImagePopupOpen(false);
         break;
-      case isTooltipPopupOpen:
-        setIsTooltipPopupOpen(false);
-        setRegistrationResult(false);
+      case infoTool.isOpen:
+        setInfoTool({
+          ...infoTool,
+          isOpen: false,
+        })
         break;
       default:
         break;
@@ -185,6 +209,8 @@ const App = () => {
   }
 
   function handleUpdateUser(user) {
+
+    console.log(user.name)
     api
       .patchUserData(user.name, user.about)
       .then((newUser) => {
@@ -220,6 +246,10 @@ const App = () => {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  if (isLoading) {
+    return <div className='body'>Загрузка...</div>;
   }
 
   return (
@@ -291,9 +321,9 @@ const App = () => {
             onClose={closeAllPopups} />
 
           <InfoTooltip
-            registrationResult={registrationResult}
-            registrationMessage={infoTooltipMessage}
-            isOpen={isTooltipPopupOpen}
+            registrationResult={infoTool.image}
+            registrationMessage={infoTool.text}
+            isOpen={infoTool.isOpen}
             onClose={closeAllPopups} />
 
         </div>

@@ -15,9 +15,7 @@ const SignIn = ({ loginUser }) => {
   }
 
   return (
-
-    <div style={{ marginBottom: '113px' }}>
-
+    <>
       <Header linkTo='/sign-up' linkName='Регистрация' />
 
       <PageWithForm
@@ -55,7 +53,7 @@ const SignIn = ({ loginUser }) => {
         <span className="form__error-text"> {errors.password} </span>
 
       </PageWithForm>
-    </div>
+    </>
   )
 }
 

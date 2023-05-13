@@ -7,7 +7,8 @@ const PopupWithForm = (
     isOpen,
     onClose,
     buttonText = 'Сохранить',
-    onSubmit
+    onSubmit,
+    isFormValid
   }) => {
 
   const handleOverlayClose = (event) => {
@@ -32,6 +33,8 @@ const PopupWithForm = (
 
   }, [isOpen, onClose]);
 
+
+
   return (
     <div
       className={`popup popup_type_${name} ${isOpen ? 'popup_opened' : ''}`}
@@ -47,9 +50,10 @@ const PopupWithForm = (
           {children}
           <input
             type="submit"
-            className="popup__save-button"
+            className={`popup__save-button ${!isFormValid ? 'popup__save-button_disabled' : ''}`}
             name="popup-save-button"
             value={buttonText}
+            disabled={!isFormValid}
           />
         </form>
       </div>
