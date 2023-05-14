@@ -9,7 +9,7 @@
 В процессе написания изучен материал. Проведена работа над ошибками.
 
 Ссылка на git pages:
-https://yacax.github.io/mesto/
+https://yacax.github.io/react-mesto-auth/
 
 
 ## Технологии и техники использованные в проекте ##

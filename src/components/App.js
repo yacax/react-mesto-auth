@@ -40,8 +40,10 @@ const App = () => {
   const [infoTool, setInfoTool] = useState({ isOpen: false, text: '', result: '' });
 
   const [userData, setUserData] = useState({
+    id: "",
     username: "",
     email: "",
+
   })
 
   useEffect(() => {
@@ -72,8 +74,12 @@ const App = () => {
   const registerUser = ({ username, password, email }) => {
     userAuth.register(username, password, email)
       .then((res) => {
-        localStorage.setItem("jwt", res.token);
-        setToken(res.token);
+        setUserData({
+          ...userData,
+          id: res.data._id,
+          username: res.data.email,
+        });
+
         setInfoTool({
           ...infoTool,
           text: "Вы успешно зарегистрировались!",
@@ -81,7 +87,15 @@ const App = () => {
           result: true,
         }
         )
+      }).then((res) => {
+        userAuth
+          .authorize(email, password)
+          .then((res) => {
+            localStorage.setItem("jwt", res.token);
+            setToken(res.token)
+          })
       })
+
       .catch((err) => {
         console.log(err)
 
@@ -102,11 +116,9 @@ const App = () => {
         localStorage.setItem("jwt", res.token);
         setToken(res.token)
         navigate("/");
-
       })
       .catch((err) => {
         console.log(err);
-
         setInfoTool({
           ...infoTool,
           text: "Неправильный логин или пароль!",
@@ -280,7 +292,6 @@ const App = () => {
               />
 
               <Route
-
                 path="/sign-up"
                 element={
                   <Register registerUser={registerUser} />
@@ -321,8 +332,8 @@ const App = () => {
             onClose={closeAllPopups} />
 
           <InfoTooltip
-            registrationResult={infoTool.image}
-            registrationMessage={infoTool.text}
+            result={infoTool.result}
+            text={infoTool.text}
             isOpen={infoTool.isOpen}
             onClose={closeAllPopups} />
 

@@ -3,8 +3,8 @@ import successImage from '../images/success.svg';
 import failImage from '../images/fail.svg';
 
 const InfoTooltip = (
-  { registrationResult,
-    registrationMessage,
+  { text,
+    result,
     isOpen,
     onClose,
   }) => {
@@ -45,8 +45,8 @@ const InfoTooltip = (
           className="popup__content">
           <img
             className='popup__picture'
-            src={registrationResult ? successImage : failImage} alt={registrationMessage} />
-          <p className='popup__info'>{registrationMessage}</p>
+            src={result ? successImage : failImage} alt={text} />
+          <p className='popup__info'>{text}</p>
 
         </div>
       </div>
